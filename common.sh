@@ -79,7 +79,7 @@ DROP TABLE flowdata_ext;
 "
 
 hdfs_init() {
-	hdfs dfs -mkdir ${HDFSDIR}/ 2>/dev/null || :
+	hdfs dfs -mkdir -p ${HDFSDIR} 2>/dev/null || :
 	# for Impala (expected it is in the group)
 	hdfs dfs -chmod g+w ${HDFSDIR}/
 }
