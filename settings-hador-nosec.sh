@@ -3,7 +3,7 @@ test -n "${FILE}" || FILE='netflow_csv_anon_small'
 
 DBNAME="`id -un`_sc_bench"
 HIVE_ARGS=''
-N=5
+test -n "${N}" || N=5
 BEELINE_ARGS="-u \"jdbc:hive2://hador21-1.ics.muni.cz:10000/${DBNAME}_hive\""
 IMPALA_ARGS="-B -i hador`seq 22 24 | shuf -n 1`-1.ics.muni.cz"
 
