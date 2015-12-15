@@ -1,5 +1,5 @@
 #FILE='netflow_csv_anon_big'
-test -z "${FILE}" || FILE='netflow_csv_anon_small'
+test -n "${FILE}" || FILE='netflow_csv_anon_small'
 
 DBNAME="`id -un`_sc_bench"
 BEELINE_ARGS="-u \"jdbc:hive2://hador-c1.ics.muni.cz:10000/${DBNAME}_hive;principal=hive/hador-c1.ics.muni.cz@ICS.MUNI.CZ\""

@@ -43,6 +43,8 @@ CREATE EXTERNAL TABLE flowdata
 )
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
 LOCATION '${HDFSDIR}';
+
+REFRESH flowdata;
 "
 
 SQL_DESTROY_TEXT="DROP TABLE flowdata;"
@@ -68,6 +70,8 @@ STORED AS parquet;
 
 INSERT INTO flowdata
   SELECT * FROM flowdata_ext;
+
+REFRESH flowdata;
 "
 
 SQL_DESTROY_PARQUET="DROP TABLE flowdata;

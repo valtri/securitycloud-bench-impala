@@ -1,5 +1,5 @@
 #FILE='netflow_csv_anon_big'
-test -z "${FILE}" || FILE='netflow_csv_anon_small'
+test -n "${FILE}" || FILE='netflow_csv_anon_small'
 
 DBNAME="`id -un`_sc_bench"
 HIVE_ARGS=''
