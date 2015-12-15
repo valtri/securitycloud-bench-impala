@@ -4,7 +4,7 @@
 
 cat <<EOF
 # import
-hive ${HIVE_ARGS} -f ${TMPDIR}/hive-init.sql
+hive --database ${DBNAME}_hive ${HIVE_ARGS} -f ${TMPDIR}/hive-init.sql 2>&1
 EOF
 
 for i in `seq 1 ${N}`; do
@@ -12,7 +12,7 @@ for i in `seq 1 ${N}`; do
 		name=`basename ${q} .sql`
 		cat <<EOF
 # ${name}
-hive ${HIVE_ARGS} -f ${q}
+hive --database ${DBNAME}_hive ${HIVE_ARGS} -f ${q} 2>&1
 EOF
 	done
 done

@@ -6,7 +6,7 @@ cat <<EOF
 # upload
 hdfs dfs -put ${SRCFILE} ${HDFSDIR}/netflow_work 2>&1
 # import
-impala-shell ${IMPALA_ARGS} -d ${DBNAME}_impala -f ${TMPDIR}/text-init.sql 2>&1
+impala-shell ${IMPALA_ARGS} -d ${DBNAME}_impala -f ${TMPDIR}/bin-init.sql 2>&1
 EOF
 
 for i in `seq 1 ${N}`; do

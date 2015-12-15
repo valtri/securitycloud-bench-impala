@@ -1,16 +1,4 @@
-#FILE='netflow_csv_anon_big'
-FILE='netflow_csv_anon_small'
-
-DBNAME="`id -un`_sc_bench"
-BEELINE_ARGS="-u \"jdbc:hive2://hador-c1.ics.muni.cz:10000/${DBNAME}_hive;principal=hive/hador-c1.ics.muni.cz@ICS.MUNI.CZ\""
-HIVE_ARGS="--database ${DBNAME}_hive"
-IMPALA_ARGS="-i hador`seq 1 24 | shuf -n 1`.ics.muni.cz -d ${DBNAME}_impala"
-N=5
-
-HDFSDIR="/user/`id -un`/sc-benchmark"
-QDIR="`dirname $0`/queries"; QDIR="`readlink -f \"${QDIR}\"`"
-SRCFILE="/scratch/`id -un`/sc-hadoop-src/${FILE}"
-TMPDIR="/tmp/`id -un`/sc-bench"
+. ./settings.sh
 
 SQL_INIT_HIVE="DROP TABLE IF EXISTS flowdata;
 
@@ -27,7 +15,7 @@ CREATE EXTERNAL TABLE flowdata
    flg STRING,
    ipkt INT,
    ibyt INT,
-   in INT
+   inum INT
 )
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
 
@@ -51,10 +39,10 @@ CREATE EXTERNAL TABLE flowdata
    flg STRING,
    ipkt INT,
    ibyt INT,
-   in INT
+   inum INT
 )
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
-LOCATION '${HDFSDIR}/netflow_work';
+LOCATION '${HDFSDIR}';
 "
 
 SQL_DESTROY_TEXT="DROP TABLE flowdata;"
@@ -74,7 +62,7 @@ CREATE EXTERNAL TABLE flowdata
    flg STRING,
    ipkt INT,
    ibyt INT,
-   in INT
+   inum INT
 )
 STORED AS parquet;
 
@@ -88,6 +76,8 @@ DROP TABLE flowdata_ext;
 
 hdfs_init() {
 	hdfs dfs -mkdir ${HDFSDIR}/ 2>/dev/null || :
+	# for Impala (expected it is in the group)
+	hdfs dfs -chmod g+w ${HDFSDIR}/
 }
 
 # ==== Initializations ====
