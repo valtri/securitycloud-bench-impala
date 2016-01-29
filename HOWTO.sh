@@ -14,5 +14,5 @@
 for f in anon_1 anon anon_big; do
   rm -rf results/${f}.log
   FILE="netflow_csv_${f}" ../benchmarking/run.pl -o result.${f} 2>&1 | tee ${f}.log
-  PREFIX="${f}-" ../benchmarking/averager.pl result.${f}
+  PREFIX="${f}" ../benchmarking/averager.pl result.${f}
 done
