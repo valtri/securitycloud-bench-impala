@@ -4,8 +4,6 @@
 
 for i in `seq 1 ${N}`; do
 	cat <<EOF
-# init
-impala-shell ${IMPALA_ARGS} -q 'INVALIDATE METADATA' 2>&1
 # import
 impala-shell ${IMPALA_ARGS} -d ${DBNAME}_impala -f ${TMPDIR}/text-init.sql 2>&1
 EOF
@@ -13,7 +11,7 @@ EOF
 		cat <<EOF
 # upload
 hdfs dfs -put ${SRCDIR10}/${f} ${HDFSDIR}/netflow_work_${f} 2>&1
-# import-refresh
+# refresh
 impala-shell ${IMPALA_ARGS} -d ${DBNAME}_impala -q 'REFRESH flowdata' 2>&1
 EOF
 	done
