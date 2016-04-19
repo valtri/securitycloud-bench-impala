@@ -16,11 +16,13 @@
 # custom parameters
 #rm -rf results/; N=2 FILE="netflow_csv_anon_1" ../benchmarking/run.pl -s impala-text
 
-for DATA in anon_1 anon anon_big; do
-  rm -rf results/${DATA}.log
-  DATA=${DATA}../benchmarking/run.pl -o result-query.${DATA} -s hive,impala-text,impala-parquet 2>&1 | tee ${DATA}.log
-  PREFIX="query-${DATE}" ../benchmarking/averager.pl result-query.${DATA}
+for DATA in 1 half big; do
+  if [ x"$DATA" = x"1" ]; then
+    benchmarks=impala-text,impala-parquet
+  else
+    benchmarks=impala-text,impala-seq-text,impala-parquet,impala-seq-parquet
+  fi
+  rm -rf ${DATA}.log
+  DATA=${DATA} ../benchmarking/run.pl -o result-query.${DATA} -s ${benchmarks} 2>&1 | tee ${DATA}.log
+  PREFIX="query-${DATA}" ../benchmarking/averager.pl result-query.${DATA}
 done
-
-DATA=small
-../benchmarking/run.pl -o result-seq.${DATA} -s impala-seq-text  2>&1 | tee seq-${DATA}.log

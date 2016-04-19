@@ -8,14 +8,16 @@ for i in `seq 1 ${N}`; do
 # dbinit
 impala-shell ${IMPALA_ARGS} -q "INVALIDATE METADATA; CREATE DATABASE ${DBNAME}_impala; INVALIDATE METADATA;" 2>&1
 # create
-impala-shell ${IMPALA_ARGS} -d ${DBNAME}_impala -f ${TMPDIR}/text-init.sql 2>&1
+impala-shell ${IMPALA_ARGS} -d ${DBNAME}_impala -f ${TMPDIR}/bin-init.sql 2>&1
 EOF
 	for f in `cd ${SRCDIR10}/; ls -1 | sort`; do
 		cat <<EOF
 # upload
 hdfs dfs -put ${SRCDIR10}/${f} ${HDFSDIR}/netflow_work_${f} 2>&1
 # import
-impala-shell ${IMPALA_ARGS} -d ${DBNAME}_impala -q 'REFRESH flowdata' 2>&1
+impala-shell ${IMPALA_ARGS} -d ${DBNAME}_impala -q 'REFRESH flowdata_ext; INSERT INTO flowdata SELECT * FROM flowdata_ext' 2>&1
+# remove
+hdfs dfs -rm ${HDFSDIR}/netflow_work\* 2>&1
 EOF
 	done
 
@@ -23,8 +25,6 @@ EOF
 		cat <<EOF
 # destroy
 impala-shell ${IMPALA_ARGS} -q "DROP DATABASE ${DBNAME}_impala CASCADE; INVALIDATE METADATA;" 2>&1
-# remove
-hdfs dfs -rm ${HDFSDIR}/netflow_work\* 2>&1
 # sleep
 sleep 10
 EOF
